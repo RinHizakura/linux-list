@@ -5,6 +5,7 @@ $(GIT_HOOK): scripts/install-git-hooks
 
 .PHONY: all check clean
 all: $(GIT_HOOK) check
+
 .DEFAULT_GOAL := all
 
 include common.mk
@@ -60,8 +61,19 @@ $(TESTS): %: %.o
 	$(VECHO) "  LD\t$@\n"
 	$(Q)$(CC) -o $@ $^ $(LDFLAGS)
 
+BUILD_DIR = build
+OUT = build/include/list_sort.o build/examples/linux-list-sort.o
+
+$(BUILD_DIR)/%.o: %.c
+	mkdir -p $(@D)
+	gcc -Iprivate $(CFLAGS) -c $< -o $@
+
+main: $(OUT)
+	gcc -o build/main $(OUT)
+
 clean:
 	$(VECHO) "  Cleaning...\n"
 	$(Q)$(RM) $(TESTS) $(TESTS_OK) $(TESTS:=.o) $(deps)
+	$(Q)$(RM) -r $(BUILD_DIR)
 
 -include $(deps)

@@ -24,3 +24,4 @@ tests/list_splice
 tests/list_splice_init
 tests/list_splice_tail
 tests/list_splice_tail_init
+build
